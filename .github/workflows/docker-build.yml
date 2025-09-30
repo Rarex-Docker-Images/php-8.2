@@ -26,6 +26,9 @@ jobs:
       - name: Extract version from Git
         id: version
         run: |
+          IMAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "image_name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          
           # Если это тег - используем версию из тега, иначе SHA
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/v}"
@@ -33,7 +36,8 @@ jobs:
             echo "is_tag=true" >> $GITHUB_OUTPUT
           else
             # Для веток используем SHA
-            VERSION="${{ github.sha }}"
+            SHA="${{ github.sha }}"
+            VERSION="${SHA:0:7}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "is_tag=false" >> $GITHUB_OUTPUT
           fi
@@ -58,8 +62,8 @@ jobs:
           target: dev
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.version.outputs.version }}
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.version.outputs.is_tag == 'true' && 'latest' || 'edge' }}
+            ${{ env.REGISTRY }}/${{ steps.version.outputs.image_name }}:${{ steps.version.outputs.version }}
+            ${{ env.REGISTRY }}/${{ steps.version.outputs.image_name }}:${{ steps.version.outputs.is_tag == 'true' && 'latest' || 'edge' }}
           build-args: |
             APP_VERSION=${{ steps.version.outputs.version }}
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
@@ -74,8 +78,8 @@ jobs:
           target: debug
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.version.outputs.version }}-debug
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.version.outputs.is_tag == 'true' && 'latest-debug' || 'edge-debug' }}
+            ${{ env.REGISTRY }}/${{ steps.version.outputs.image_name }}:${{ steps.version.outputs.version }}-debug
+            ${{ env.REGISTRY }}/${{ steps.version.outputs.image_name }}:${{ steps.version.outputs.is_tag == 'true' && 'latest-debug' || 'edge-debug' }}
           build-args: |
             APP_VERSION=${{ steps.version.outputs.version }}
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
