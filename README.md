@@ -3,22 +3,22 @@ PHP-FPM 8.2 for development
 
 ## Latest
 ```
-ghcr.io/Rarex-Docker-Images/php-8.2:latest
+ghcr.io/rarex-docker-images/php-8.2:latest
 ```
 ### Latest with XDebug
 ```
-ghcr.io/Rarex-Docker-Images/php-8.2:latest-debug
+ghcr.io/rarex-docker-images/php-8.2:latest-debug
 ```
 
 ---
 
 ## Version
 ```
-ghcr.io/Rarex-Docker-Images/php-8.2:v1.0.0
+ghcr.io/rarex-docker-images/php-8.2:v1.0.0
 ```
 ### Version with XDebug
 ```
-ghcr.io/Rarex-Docker-Images/php-8.2:v1.0.0-debug
+ghcr.io/rarex-docker-images/php-8.2:v1.0.0-debug
 ```
 
 ---
